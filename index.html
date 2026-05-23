@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electronica — Electronics Engineering Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  /* ===================== CSS VARIABLES ===================== */
+  :root {
+    --bg: #0a0c14;
+    --surface: #111422;
+    --surface2: #181d2e;
+    --surface3: #1f2540;
+    --border: rgba(99,120,255,0.12);
+    --border-bright: rgba(99,120,255,0.28);
+    --accent: #6378ff;
+    --accent2: #a78bfa;
+    --accent3: #38bdf8;
+    --success: #34d399;
+    --danger: #f87171;
+    --warning: #fbbf24;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5578;
+    --glow: 0 0 40px rgba(99,120,255,0.18);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ===================== RESET ===================== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ===================== BACKGROUND ===================== */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% -10%, rgba(99,120,255,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 110%, rgba(167,139,250,0.09) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 60% 40%, rgba(56,189,248,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===================== LAYOUT ===================== */
+  #app {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ===================== HEADER ===================== */
+  header {
+    width: 100%;
+    padding: 28px 40px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,12,20,0.85);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 0 20px rgba(99,120,255,0.35);
+  }
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #fff 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(99,120,255,0.1);
+    border: 1px solid var(--border-bright);
+    border-radius: 20px;
+    padding: 4px 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ===================== MAIN CONTENT ===================== */
+  main {
+    width: 100%;
+    max-width: 820px;
+    padding: 40px 20px 60px;
+    flex: 1;
+  }
+
+  /* ===================== SCREENS ===================== */
+  .screen { display: none; animation: fadeIn 0.4s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===================== START SCREEN ===================== */
+  .start-hero {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .start-chip {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    background: rgba(56,189,248,0.08);
+    border: 1px solid rgba(56,189,248,0.2);
+    border-radius: 20px;
+    padding: 6px 16px;
+    margin-bottom: 28px;
+  }
+  .start-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(48px, 8vw, 80px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -3px;
+    margin-bottom: 20px;
+    background: linear-gradient(160deg, #ffffff 0%, var(--accent) 55%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .start-subtitle {
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 460px;
+    margin: 0 auto 44px;
+    line-height: 1.7;
+  }
+
+  /* ===================== TOPIC GRID ===================== */
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 0 0 44px;
+    text-align: left;
+  }
+  .topic-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-dim);
+    transition: var(--transition);
+  }
+  .topic-card:hover { border-color: var(--border-bright); color: var(--text); background: var(--surface2); }
+  .topic-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(99,120,255,0.1);
+    border-radius: 6px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ===================== BUTTONS ===================== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
+    text-decoration: none;
+    letter-spacing: -0.2px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(99,120,255,0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(99,120,255,0.45);
+  }
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover {
+    background: var(--surface3);
+    border-color: var(--border-bright);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--border-bright); }
+  .btn-success {
+    background: linear-gradient(135deg, #059669, #34d399);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(52,211,153,0.25);
+  }
+  .btn-success:hover { transform: translateY(-2px); }
+  .btn-danger {
+    background: rgba(248,113,113,0.1);
+    color: var(--danger);
+    border: 1px solid rgba(248,113,113,0.2);
+  }
+  .btn-lg { padding: 18px 40px; font-size: 17px; border-radius: var(--radius); }
+
+  /* ===================== PROGRESS BAR ===================== */
+  .progress-container {
+    margin-bottom: 28px;
+  }
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  .progress-score {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .progress-bar-bg {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 99px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 12px rgba(99,120,255,0.5);
+  }
+
+  /* ===================== SCORE CHIPS ===================== */
+  .score-chips {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+  }
+  .chip-correct { background: rgba(52,211,153,0.1); color: var(--success); border: 1px solid rgba(52,211,153,0.2); }
+  .chip-wrong { background: rgba(248,113,113,0.1); color: var(--danger); border: 1px solid rgba(248,113,113,0.2); }
+  .chip-remaining { background: rgba(99,120,255,0.08); color: var(--text-dim); border: 1px solid var(--border); }
+
+  /* ===================== QUESTION CARD ===================== */
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 40px;
+    margin-bottom: 20px;
+    box-shadow: var(--glow);
+    position: relative;
+    overflow: hidden;
+  }
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+  }
+  .question-topic {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent3);
+    background: rgba(56,189,248,0.07);
+    border: 1px solid rgba(56,189,248,0.15);
+    border-radius: 99px;
+    padding: 4px 12px;
+    margin-bottom: 20px;
+  }
+  .difficulty-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .diff-easy { background: var(--success); }
+  .diff-medium { background: var(--warning); }
+  .diff-hard { background: var(--danger); }
+
+  .question-text {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(17px, 2.5vw, 21px);
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 32px;
+    letter-spacing: -0.3px;
+  }
+
+  /* ===================== OPTIONS ===================== */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+
+  .option-btn {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: var(--transition);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--border-bright);
+    background: var(--surface3);
+    transform: translateY(-1px);
+  }
+  .option-btn:disabled { cursor: default; }
+
+  .option-letter {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: rgba(99,120,255,0.1);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dim);
+    transition: var(--transition);
+  }
+  .option-btn:hover:not(:disabled) .option-letter { background: rgba(99,120,255,0.2); color: var(--accent); border-color: var(--accent); }
+
+  .option-btn.correct {
+    border-color: var(--success);
+    background: rgba(52,211,153,0.08);
+  }
+  .option-btn.correct .option-letter { background: var(--success); color: #0a0c14; border-color: var(--success); }
+  .option-btn.wrong {
+    border-color: var(--danger);
+    background: rgba(248,113,113,0.08);
+  }
+  .option-btn.wrong .option-letter { background: var(--danger); color: #fff; border-color: var(--danger); }
+  .option-btn.dimmed { opacity: 0.4; }
+
+  /* ===================== FEEDBACK ===================== */
+  .feedback-bar {
+    border-radius: var(--radius-sm);
+    padding: 14px 20px;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  .feedback-bar.show { display: flex; }
+  .feedback-bar.correct-fb { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.25); color: var(--success); }
+  .feedback-bar.wrong-fb { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.2); color: #fca5a5; }
+  .feedback-icon { font-size: 18px; flex-shrink: 0; }
+
+  /* ===================== NAV CONTROLS ===================== */
+  .nav-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    gap: 12px;
+  }
+  .nav-left, .nav-right { display: flex; gap: 10px; }
+
+  /* ===================== RESULTS SCREEN ===================== */
+  .results-hero {
+    text-align: center;
+    padding: 40px 20px 32px;
+  }
+  .results-circle {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) 0%, transparent 0%);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    position: relative;
+    box-shadow: 0 0 60px rgba(99,120,255,0.2);
+  }
+  .results-circle-inner {
+    width: 128px; height: 128px;
+    border-radius: 50%;
+    background: var(--surface);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .results-pct {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+  .results-pct-label { font-size: 12px; color: var(--text-muted); font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+
+  .performance-label {
+    display: inline-block;
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .perf-excellent { color: var(--success); }
+  .perf-good { color: var(--accent3); }
+  .perf-average { color: var(--warning); }
+  .perf-review { color: var(--danger); }
+
+  .results-subtitle { color: var(--text-dim); font-size: 15px; margin-bottom: 32px; }
+
+  .results-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .result-stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .result-stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .result-stat-key { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  .rsc-correct .result-stat-val { color: var(--success); }
+  .rsc-wrong .result-stat-val { color: var(--danger); }
+  .rsc-total .result-stat-val { color: var(--accent); }
+  .rsc-pct .result-stat-val { color: var(--accent2); }
+
+  .results-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+
+  /* ===================== REVIEW SCREEN ===================== */
+  .review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .review-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .review-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 14px;
+    border-left: 3px solid var(--danger);
+  }
+  .review-q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .review-q-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .review-answers { display: flex; flex-direction: column; gap: 8px; }
+  .review-answer {
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ra-correct { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); color: var(--success); }
+  .ra-wrong { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.15); color: #fca5a5; text-decoration: line-through; opacity: 0.7; }
+  .ra-icon { flex-shrink: 0; }
+
+  /* ===================== TOPIC BADGE ===================== */
+  .topic-label-map { font-size: 11px; }
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width: 640px) {
+    header { padding: 20px 20px 14px; }
+    main { padding: 24px 14px 48px; }
+    .question-card { padding: 24px 20px; }
+    .nav-controls { flex-wrap: wrap; }
+    .results-stats { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">Electronica</span>
+    </div>
+    <span class="header-badge" id="headerBadge">ECE · Spring 2026</span>
+  </header>
+
+  <main>
+    <!-- ===================== START SCREEN ===================== -->
+    <div id="startScreen" class="screen active">
+      <div class="start-hero">
+        <div class="start-chip">Electronics Engineering · Interactive Quiz</div>
+        <h1 class="start-title">Master<br>Electronics</h1>
+        <p class="start-subtitle">Test your knowledge across 10 lecture topics — from fundamental components to power amplifiers and integrated circuits.</p>
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-num">120</span>
+            <span class="stat-label">Questions</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">10</span>
+            <span class="stat-label">Topics</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">3</span>
+            <span class="stat-label">Difficulty Levels</span>
+          </div>
+        </div>
+      </div>
+      <div class="topics-grid">
+        <div class="topic-card"><span class="topic-num">01</span>Electronic Components</div>
+        <div class="topic-card"><span class="topic-num">02</span>Characteristics of Electricity</div>
+        <div class="topic-card"><span class="topic-num">03</span>Laws of Electricity</div>
+        <div class="topic-card"><span class="topic-num">04</span>Basic Test Equipment</div>
+        <div class="topic-card"><span class="topic-num">05</span>Circuit Boards & Motors</div>
+        <div class="topic-card"><span class="topic-num">06</span>Semiconductors & Diodes</div>
+        <div class="topic-card"><span class="topic-num">07</span>Transistors</div>
+        <div class="topic-card"><span class="topic-num">08</span>Small-Signal Amplifiers</div>
+        <div class="topic-card"><span class="topic-num">09</span>Operational Amplifiers</div>
+        <div class="topic-card"><span class="topic-num">10</span>Integrated Circuits</div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn btn-primary btn-lg" onclick="startQuiz()">⚡ Start Quiz</button>
+      </div>
+    </div>
+
+    <!-- ===================== QUIZ SCREEN ===================== -->
+    <div id="quizScreen" class="screen">
+      <div class="progress-container">
+        <div class="progress-top">
+          <span class="progress-label" id="progressLabel">Question 1 of 120</span>
+          <span class="progress-score" id="progressScore">Score: 0</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="score-chips">
+        <div class="chip chip-correct">✓ <span id="correctCount">0</span> Correct</div>
+        <div class="chip chip-wrong">✗ <span id="wrongCount">0</span> Wrong</div>
+        <div class="chip chip-remaining">◷ <span id="remainCount">120</span> Left</div>
+      </div>
+      <div class="question-card" id="questionCard">
+        <div class="question-topic" id="questionTopic">Topic</div>
+        <div class="question-text" id="questionText">Question text here</div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback-bar" id="feedbackBar">
+          <span class="feedback-icon" id="feedbackIcon"></span>
+          <span id="feedbackText"></span>
+        </div>
+      </div>
+      <div class="nav-controls">
+        <div class="nav-left">
+          <button class="btn btn-ghost" onclick="prevQuestion()" id="prevBtn">← Prev</button>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text-muted);" id="qCounter">1 / 120</div>
+        <div class="nav-right">
+          <button class="btn btn-secondary" onclick="nextQuestion()" id="nextBtn">Next →</button>
+          <button class="btn btn-primary" onclick="finishEarly()" id="finishBtn" style="display:none;">Finish</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== RESULTS SCREEN ===================== -->
+    <div id="resultsScreen" class="screen">
+      <div class="results-hero">
+        <div class="results-circle" id="resultsCircle">
+          <div class="results-circle-inner">
+            <span class="results-pct" id="resultsPct">0%</span>
+            <span class="results-pct-label">SCORE</span>
+          </div>
+        </div>
+        <div class="performance-label" id="perfLabel">—</div>
+        <p class="results-subtitle" id="perfSub">Here's how you did.</p>
+      </div>
+      <div class="results-stats">
+        <div class="result-stat-card rsc-correct">
+          <span class="result-stat-val" id="rCorrect">0</span>
+          <span class="result-stat-key">Correct</span>
+        </div>
+        <div class="result-stat-card rsc-wrong">
+          <span class="result-stat-val" id="rWrong">0</span>
+          <span class="result-stat-key">Incorrect</span>
+        </div>
+        <div class="result-stat-card rsc-total">
+          <span class="result-stat-val" id="rTotal">0</span>
+          <span class="result-stat-key">Answered</span>
+        </div>
+        <div class="result-stat-card rsc-pct">
+          <span class="result-stat-val" id="rPct">0%</span>
+          <span class="result-stat-key">Percentage</span>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startQuiz()">↺ Restart Quiz</button>
+        <button class="btn btn-secondary" onclick="showReview()" id="reviewBtn">Review Mistakes</button>
+        <button class="btn btn-ghost" onclick="showScreen('startScreen')">← Home</button>
+      </div>
+    </div>
+
+    <!-- ===================== REVIEW SCREEN ===================== -->
+    <div id="reviewScreen" class="screen">
+      <div class="review-header">
+        <h2 class="review-title">📋 Mistake Review</h2>
+        <button class="btn btn-ghost" onclick="showScreen('resultsScreen')">← Back to Results</button>
+      </div>
+      <div id="reviewList"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* =====================================================================
+   QUESTION DATABASE — 120 Questions across 10 Topics
+   Topics:
+   1 = Electronic Components & History
+   2 = Characteristics of Electricity
+   3 = Laws of Electricity
+   4 = Basic Test Equipment
+   5 = Circuit Boards & Motors
+   6 = Semiconductors & Diodes
+   7 = Transistors
+   8 = Small-Signal Amplifiers
+   9 = Operational Amplifiers / Power Amplifiers
+   10 = Integrated Circuits
+===================================================================== */
+
+const TOPIC_NAMES = {
+  1: "Electronic Components",
+  2: "Characteristics of Electricity",
+  3: "Laws of Electricity",
+  4: "Basic Test Equipment",
+  5: "Circuit Boards & Motors",
+  6: "Semiconductors & Diodes",
+  7: "Transistors",
+  8: "Small-Signal Amplifiers",
+  9: "Power Amplifiers",
+  10: "Integrated Circuits"
+};
+
+const QUESTIONS = [
+  // ───── TOPIC 1: ELECTRONIC COMPONENTS & HISTORY ─────
+  {t:1,d:"easy",q:"Who is credited with discovering the electron in 1897?",a:["J.J. Thomson","Guglielmo Marconi","Lee De Forest","Nikola Tesla"],c:0},
+  {t:1,d:"easy",q:"What type of electronic component is used to oppose the flow of electric current?",a:["Capacitor","Inductor","Resistor","Diode"],c:2},
+  {t:1,d:"easy",q:"In 1901, Guglielmo Marconi achieved the first transatlantic wireless transmission. Where was the receiving station?",a:["Cornwall, England","Paris, France","Newfoundland, Canada","New York, USA"],c:2},
+  {t:1,d:"easy",q:"What was the major invention demonstrated by Bell Labs researchers in December 1947?",a:["Integrated circuit","Microprocessor","Transistor","Vacuum tube triode"],c:2},
+  {t:1,d:"easy",q:"What does an analog circuit produce or respond to?",a:["Only two discrete states","A continuous range of output values","Only HIGH or LOW signals","Binary pulses only"],c:1},
+  {t:1,d:"easy",q:"A potentiometer is a type of:",a:["Fixed resistor","Variable resistor with three terminals","Non-ohmic device","Current-limiting capacitor"],c:1},
+  {t:1,d:"medium",q:"Lee De Forest's audion vacuum tube introduced a third element called the:",a:["Cathode","Anode","Grid","Filament"],c:2},
+  {t:1,d:"medium",q:"Greenleaf W. Pickard's crystal detector used a piece of galena crystal and a thin wire called a:",a:["Whisker wire","Cat's whisker","Touch wire","Signal wire"],c:1},
+  {t:1,d:"medium",q:"Which digital voltage range represents binary LOW?",a:["2.0 to 5 V","0 to 0.4 V","0.4 to 2.0 V","5 to 12 V"],c:1},
+  {t:1,d:"medium",q:"What does an A/D converter do?",a:["Converts digital signals to analog","Converts analog signals to digital data","Amplifies analog signals","Filters unwanted frequencies"],c:1},
+  {t:1,d:"medium",q:"Jack Kilby of Texas Instruments is credited with developing the first:",a:["Transistor","Microprocessor","Integrated circuit","Vacuum tube"],c:2},
+  {t:1,d:"medium",q:"The number of digital levels in an n-bit D/A converter is calculated as:",a:["2n","n²","n×2","2^n"],c:3},
+  {t:1,d:"hard",q:"Which analog function describes a device that routes many signal sources into a single output?",a:["Demultiplexer","Multiplexer","Comparator","Mixer"],c:1},
+  {t:1,d:"hard",q:"The Intel 4004 microprocessor, introduced in 1971, contained approximately how many transistors?",a:["100","2,300","6,000","10,000"],c:1},
+  {t:1,d:"hard",q:"A schematic diagram differs from a block diagram in that it shows:",a:["Signal flow between functional blocks","Individual parts and their electrical interconnections","Only input/output relationships","The physical layout of the PCB"],c:1},
+  {t:1,d:"hard",q:"Which of the following is NOT a function of analog electronic circuits?",a:["Rectification","Oscillation","Binary counting","Modulation"],c:2},
+
+  // ───── TOPIC 2: CHARACTERISTICS OF ELECTRICITY ─────
+  {t:2,d:"easy",q:"Voltage is mathematically defined as:",a:["Current × Time","Energy per unit charge","Charge × Resistance","Power × Time"],c:1},
+  {t:2,d:"easy",q:"The unit of electrical current is:",a:["Volt","Ohm","Ampere","Farad"],c:2},
+  {t:2,d:"easy",q:"One ampere is defined as:",a:["One volt per ohm","One coulomb per second","One joule per volt","One watt per ampere"],c:1},
+  {t:2,d:"easy",q:"DC current flows:",a:["In alternating directions periodically","Only in one direction","In a sine wave pattern","Both ways simultaneously"],c:1},
+  {t:2,d:"easy",q:"What is conductance, and what is its unit?",a:["Opposition to current; ohm (Ω)","Ease of current flow; siemens (S)","Voltage per current; volt (V)","Energy storage; farad (F)"],c:1},
+  {t:2,d:"easy",q:"In which direction does conventional current flow?",a:["From negative to positive terminal","From low potential to high potential","From high potential to low potential","Opposite to electron flow, from + to −"],c:3},
+  {t:2,d:"medium",q:"The electric field always points from:",a:["Negative charge to positive charge","Positive charge to negative charge","Low voltage to high voltage","Ground to supply voltage"],c:1},
+  {t:2,d:"medium",q:"Which of the following is a good conductor?",a:["Rubber","Glass","Copper","Plastic"],c:2},
+  {t:2,d:"medium",q:"Node voltage is defined as the voltage measured relative to:",a:["The positive supply terminal","The nearest component","Ground (0 V reference)","The previous node"],c:2},
+  {t:2,d:"medium",q:"In a circuit, Va = 10 V and Vb = 5 V. What is Vab?",a:["15 V","5 V","-5 V","2 V"],c:1},
+  {t:2,d:"medium",q:"The electric field unit 'volts per meter' (V/m) represents:",a:["Rate of charge flow","Change in voltage over distance","Energy per charge","Current density"],c:1},
+  {t:2,d:"medium",q:"Which energy conversion occurs in a DC electric motor?",a:["Chemical → Electrical","Electrical → Mechanical","Thermal → Electrical","Mechanical → Chemical"],c:1},
+  {t:2,d:"hard",q:"In a metal conductor, what are the actual moving charge carriers?",a:["Positive holes","Protons","Electrons","Positrons"],c:2},
+  {t:2,d:"hard",q:"Electrical energy stored in an electric field is most commonly associated with which component?",a:["Inductor","Resistor","Capacitor","Transformer"],c:2},
+  {t:2,d:"hard",q:"Why can alternating current be transmitted efficiently over long distances?",a:["It has lower resistance than DC","Its voltage can be easily stepped up with transformers","It does not generate heat","It travels faster than DC"],c:1},
+  {t:2,d:"hard",q:"In the electrical-mechanical analogy, what corresponds to 'voltage' in a fluid system?",a:["Flow rate","Temperature","Pressure","Viscosity"],c:2},
+
+  // ───── TOPIC 3: LAWS OF ELECTRICITY ─────
+  {t:3,d:"easy",q:"Ohm's Law states that voltage equals:",a:["Current ÷ Resistance","Current × Resistance","Resistance ÷ Current","Power × Time"],c:1},
+  {t:3,d:"easy",q:"In a series circuit, the total resistance is:",a:["Less than the smallest resistor","Equal to the smallest resistor","The sum of all individual resistors","The product of all resistors"],c:2},
+  {t:3,d:"easy",q:"In a parallel circuit, all components share the same:",a:["Current","Resistance","Voltage","Power"],c:2},
+  {t:3,d:"easy",q:"Kirchhoff's Current Law (KCL) states that the sum of currents at a node is:",a:["Equal to the supply voltage","Always positive","Zero","Equal to total resistance"],c:2},
+  {t:3,d:"easy",q:"Kirchhoff's Voltage Law (KVL) states that the sum of all voltages around a closed loop is:",a:["Equal to the supply voltage","Zero","Equal to total current","Equal to total power"],c:1},
+  {t:3,d:"easy",q:"Electrical power consumed by a resistor is calculated as:",a:["P = V/I","P = V × I","P = R/I","P = I/V"],c:1},
+  {t:3,d:"medium",q:"Two resistors of 20 Ω and 60 Ω are in parallel with a 30 V supply. What is the current through the 20 Ω resistor?",a:["0.5 A","1.0 A","1.5 A","2.0 A"],c:2},
+  {t:3,d:"medium",q:"Two equal resistors connected in series have a total voltage of 100 V. What voltage appears across each resistor?",a:["100 V","25 V","50 V","75 V"],c:2},
+  {t:3,d:"medium",q:"In a parallel circuit, adding more resistors causes the total resistance to:",a:["Increase","Decrease","Stay the same","Double"],c:1},
+  {t:3,d:"medium",q:"The voltage divider formula calculates the output voltage based on:",a:["The ratio of load resistance to total resistance","The ratio of one series resistor to the sum of all resistors","The product of source voltage and resistance","KCL applied at the output node"],c:1},
+  {t:3,d:"medium",q:"In the current divider rule for two parallel resistors R1 and R2, the current through R1 is proportional to:",a:["R1","R2","1/R1","R1+R2"],c:1},
+  {t:3,d:"medium",q:"A resistor connected permanently across a power supply output is called a:",a:["Load resistor","Surge limiter","Bleeder resistor","Filter resistor"],c:2},
+  {t:3,d:"hard",q:"Two resistors of 20 Ω and 60 Ω are in parallel with a 30 V supply. What is the total current from the source?",a:["0.5 A","1.5 A","2.0 A","3.0 A"],c:2},
+  {t:3,d:"hard",q:"A capacitive filter time constant is T = R × C. If R = 100 Ω and C = 1000 µF, what percentage of charge is lost in one time constant?",a:["100%","50%","63.2%","36.8%"],c:2},
+  {t:3,d:"hard",q:"Which circuit law is used to find the current in each branch of a parallel network?",a:["Ohm's Law only","KCL only","KVL only","Both KCL and Ohm's Law"],c:3},
+  {t:3,d:"hard",q:"For a light-dependent resistor (LDR) used in a voltage divider, as light increases, the LDR resistance:",a:["Increases","Stays constant","Decreases","Doubles"],c:2},
+
+  // ───── TOPIC 4: BASIC TEST EQUIPMENT ─────
+  {t:4,d:"easy",q:"A digital multimeter is used to measure:",a:["Only voltage","Only current","Voltage, current, and resistance","Signal frequency only"],c:2},
+  {t:4,d:"easy",q:"An oscilloscope primarily displays:",a:["Resistance vs. time","Voltage vs. time (waveforms)","Current vs. resistance","Frequency vs. amplitude"],c:1},
+  {t:4,d:"easy",q:"What tool is used to remove insulation from wire ends?",a:["Tweezers","Soldering station","Self-adjusting wire stripper","Dremel rotary tool"],c:2},
+  {t:4,d:"easy",q:"A soldering station is used for:",a:["Cutting circuit boards","Joining electrical components with solder","Removing solder only","Drilling PCB holes"],c:1},
+  {t:4,d:"easy",q:"A 'Third Hand Tool' is primarily used to:",a:["Strip wires","Hold components steady while soldering","Measure voltage","Cut traces on a PCB"],c:1},
+  {t:4,d:"medium",q:"Which oscilloscope configuration allows floating measurements by having each channel isolated from others and from the USB port?",a:["Bench-top oscilloscope","Single-channel oscilloscope","Battery-operated portable oscilloscope with isolated architecture","Analog oscilloscope"],c:2},
+  {t:4,d:"medium",q:"Bench-top oscilloscopes are NOT suited for floating measurements because:",a:["They have too many channels","They have a common reference and non-insulated case","Their bandwidth is too low","Their probes are incompatible"],c:1},
+  {t:4,d:"medium",q:"A Dremel rotary tool is typically used in electronics for:",a:["Desoldering components","Cutting, grinding, and shaping materials","Measuring resistance","Applying hot glue"],c:1},
+  {t:4,d:"medium",q:"Tweezers are particularly useful in electronics for:",a:["Measuring small voltages","Holding or placing tiny SMD components","Stripping wires","Applying solder"],c:1},
+  {t:4,d:"hard",q:"A floating measurement refers to taking readings with the common test-lead connection:",a:["Connected directly to ground","At some potential other than ground","Always at the negative supply terminal","Between the two supply rails"],c:1},
+  {t:4,d:"hard",q:"A precision screwdriver set in electronics is most important for:",a:["Cutting traces","Adjusting small trimmer potentiometers and securing PCB screws","Measuring component values","Splicing wires"],c:1},
+  {t:4,d:"hard",q:"On an oscilloscope, waveforms are typically shown with positive voltages displayed:",a:["Down on the screen","Up on the screen","To the right","In the centre"],c:1},
+
+  // ───── TOPIC 5: CIRCUIT BOARDS & MOTORS ─────
+  {t:5,d:"easy",q:"A breadboard is used primarily for:",a:["Permanent circuit construction","Prototyping without soldering","PCB etching","Wave soldering"],c:1},
+  {t:5,d:"easy",q:"What distinguishes a Printed Circuit Board (PCB) from a breadboard?",a:["PCBs use copper traces etched permanently; breadboards use removable connections","PCBs cannot support ICs","Breadboards are for high-frequency designs","PCBs are always single-sided"],c:0},
+  {t:5,d:"easy",q:"A DC motor converts:",a:["Mechanical energy to electrical energy","Electrical energy to mechanical energy","Chemical energy to electrical energy","Heat energy to motion"],c:1},
+  {t:5,d:"easy",q:"In a brushed DC motor, what is the purpose of the commutator?",a:["To cool the motor","To switch current direction in the armature coils","To control the motor's speed electronically","To store energy"],c:1},
+  {t:5,d:"easy",q:"Stepper motors are used in applications requiring:",a:["Very high speeds","Precise positional control in discrete steps","High torque at low cost","Only AC power"],c:1},
+  {t:5,d:"medium",q:"In a BLDC (brushless DC) motor, the coils are located on the:",a:["Rotor","Commutator","Stator","Armature shaft"],c:2},
+  {t:5,d:"medium",q:"In a BLDC motor, what rotates?",a:["The coils","The brushes","The permanent magnet (rotor)","The commutator"],c:2},
+  {t:5,d:"medium",q:"Which type of DC motor is preferred for applications requiring high durability and low electrical noise?",a:["Series-wound brushed motor","Shunt-wound brushed motor","BLDC (brushless DC) motor","Universal motor"],c:2},
+  {t:5,d:"medium",q:"A stripboard differs from a breadboard in that it:",a:["Can only be used for analog circuits","Has pre-drilled holes with copper strips that require cutting to make connections","Does not support soldering","Is only for SMD components"],c:1},
+  {t:5,d:"hard",q:"In a brushed DC motor, the speed of the motor can be changed by:",a:["Changing the number of coils only","Altering the operative voltage or the magnetic field strength","Changing the commutator material","Reversing the rotor polarity only"],c:1},
+  {t:5,d:"hard",q:"BLDC motors are commonly used in hard disc drives primarily because of their:",a:["Low cost","High noise generation","Long operational life and power efficiency","Simple wiring compared to brushed motors"],c:2},
+  {t:5,d:"hard",q:"A DC generator differs from a DC motor in that it:",a:["Uses AC power","Converts mechanical energy into electrical energy","Uses BLDC technology only","Has no rotor"],c:1},
+  {t:5,d:"hard",q:"What type of motor is used most commonly for washing machines and air conditioners due to high efficiency?",a:["Series-wound brushed DC motor","BLDC motor","Universal AC/DC motor","Stepper motor"],c:1},
+
+  // ───── TOPIC 6: SEMICONDUCTORS & DIODES ─────
+  {t:6,d:"easy",q:"A diode allows current to flow primarily in:",a:["Both directions equally","One direction only","Neither direction","Alternating directions"],c:1},
+  {t:6,d:"easy",q:"In a PN junction diode, the anode is connected to the:",a:["N-type material","P-type material","Ground","Cathode"],c:1},
+  {t:6,d:"easy",q:"A half-wave rectifier converts AC to DC by passing only:",a:["Both half-cycles","The negative half-cycle","The positive half-cycle","Neither half-cycle"],c:2},
+  {t:6,d:"easy",q:"How many diodes does a bridge rectifier use?",a:["1","2","3","4"],c:3},
+  {t:6,d:"easy",q:"A Zener diode is specifically designed to operate in:",a:["Forward bias only","The saturation region","Reverse breakdown","Cut-off region"],c:2},
+  {t:6,d:"medium",q:"The breakdown voltage of a diode is the critical reverse voltage at which:",a:["Current drops to zero","The diode begins conducting forward","Current increases sharply in reverse","The diode stops glowing"],c:2},
+  {t:6,d:"medium",q:"In a full-wave rectifier, which part of the circuit must be present that is NOT needed for a bridge rectifier?",a:["Filter capacitor","Load resistor","Center-tapped transformer","Zener diode"],c:2},
+  {t:6,d:"medium",q:"In a half-wave rectifier output waveform, what happens to the negative half of the AC input?",a:["It is inverted","It is amplified","It is blocked by the diode","It passes through unchanged"],c:2},
+  {t:6,d:"medium",q:"For forward current to flow in a silicon diode, the forward bias voltage must typically overcome:",a:["0 V barrier","~0.7 V barrier","~0.3 V barrier","~1.2 V barrier"],c:1},
+  {t:6,d:"medium",q:"What is the primary function of a smoothing capacitor in a rectifier circuit?",a:["Increase ripple","Reverse-bias the diode","Store charge and reduce voltage pulsations","Block DC and pass AC"],c:2},
+  {t:6,d:"hard",q:"In a capacitive filter, increasing the load resistance leads to:",a:["More ripple","Less ripple","No change in ripple","Higher output voltage only"],c:1},
+  {t:6,d:"hard",q:"The two mechanisms of reverse breakdown in diodes are:",a:["Forward and reverse biasing","Zener breakdown and Avalanche breakdown","Ohmic and non-ohmic breakdown","Thermal and electrical breakdown"],c:1},
+  {t:6,d:"hard",q:"A voltage doubler can produce an output DC voltage as high as approximately how many times the RMS input voltage?",a:["1.0×","1.41×","2.8×","5.0×"],c:2},
+  {t:6,d:"hard",q:"In a bridge rectifier, current through the load always flows in:",a:["Alternating directions","One direction regardless of AC alternation","Both directions depending on which diodes conduct","Random direction"],c:1},
+  {t:6,d:"hard",q:"The percentage of ripple in a filtered power supply is calculated as: ripple% =",a:["(Vdc / Vac) × 100%","(Vac / Vdc) × 100%","(Vac + Vdc) / 100","(Vdc − Vac) × 100"],c:1},
+
+  // ───── TOPIC 7: TRANSISTORS ─────
+  {t:7,d:"easy",q:"A BJT transistor has three terminals named:",a:["Gate, Source, Drain","Anode, Cathode, Grid","Emitter, Base, Collector","Emitter, Collector, Gate"],c:1},
+  {t:7,d:"easy",q:"Which terminal of a BJT is the most heavily doped?",a:["Collector","Base","Emitter","All equally doped"],c:2},
+  {t:7,d:"easy",q:"In a BJT, the base region is:",a:["Thick and heavily doped","Very thin and lightly doped","Moderately doped and widest","The same size as the emitter"],c:1},
+  {t:7,d:"easy",q:"The two types of BJT are:",a:["FET and MOSFET","NPN and PNP","Enhancement and Depletion","N-channel and P-channel"],c:1},
+  {t:7,d:"easy",q:"For a BJT to operate normally, the base-emitter junction must be:",a:["Reverse biased","Forward biased","Unbiased","Zero biased"],c:1},
+  {t:7,d:"medium",q:"The transistor current relationship is expressed as:",a:["IC = IB + IE","IE = IB + IC","IB = IE + IC","IE = IC - IB"],c:1},
+  {t:7,d:"medium",q:"In an NPN BJT, the majority carriers injected from the emitter into the base are:",a:["Holes","Protons","Electrons","Photons"],c:2},
+  {t:7,d:"medium",q:"The Nobel Prize in Physics awarded to transistor inventors was in which year?",a:["1947","1952","1956","1958"],c:2},
+  {t:7,d:"medium",q:"In a MOSFET used as a switch, which region corresponds to the switch being ON (closed)?",a:["Cutoff region","Saturation region","Triode (linear) region","Pinch-off region"],c:2},
+  {t:7,d:"medium",q:"In a MOSFET, when VGS < Vt (threshold voltage), the transistor is in:",a:["Triode region","Saturation region","Cutoff region","Active region"],c:2},
+  {t:7,d:"hard",q:"In the four-resistor bias circuit for a MOSFET amplifier, the gate voltage is set by:",a:["The drain current and load resistor","A voltage divider formed by two gate resistors","The source resistor and drain current","The threshold voltage directly"],c:1},
+  {t:7,d:"hard",q:"The first transistor demonstrated at Bell Labs in December 1947 was made from:",a:["Silicon","Galena (lead sulfide)","Germanium","Gallium arsenide"],c:2},
+  {t:7,d:"hard",q:"A MOSFET common-source amplifier is biased in the saturation region. The slope of the large-signal transfer characteristic represents:",a:["The output resistance","The input impedance","The amplifier voltage gain","The threshold voltage"],c:2},
+  {t:7,d:"hard",q:"In an NPN transistor, what causes the small base current compared to collector current?",a:["The base is reverse biased","The base is very thin and lightly doped, so few carriers recombine there","The emitter is undoped","The collector doping is too high"],c:1},
+  {t:7,d:"hard",q:"What happens to a MOSFET's gate current in normal operation?",a:["It equals the drain current","It is very large due to gate capacitance","It is zero because the gate is insulated","It equals the source current"],c:2},
+
+  // ───── TOPIC 8: SMALL-SIGNAL AMPLIFIERS ─────
+  {t:8,d:"easy",q:"In a common-emitter BJT amplifier, the signal is applied to the:",a:["Collector","Emitter","Base","All terminals"],c:2},
+  {t:8,d:"easy",q:"What is the main advantage of FETs over BJTs in amplifier applications?",a:["Lower frequency response","Very high input impedance","Higher current gain","Cheaper manufacturing"],c:1},
+  {t:8,d:"easy",q:"AC coupling capacitors in amplifiers act as:",a:["DC shorts","AC blocks","DC passers and AC blockers","AC and DC shorts"],c:0},
+  {t:8,d:"easy",q:"A common-source MOSFET amplifier has:",a:["Non-inverting gain","Inverting gain (negative sign)","Unity gain","Zero gain"],c:1},
+  {t:8,d:"easy",q:"In amplifier design, 'gain' refers to:",a:["Power consumption of the circuit","The ratio of output signal to input signal","The DC bias voltage","The bandwidth of the amplifier"],c:1},
+  {t:8,d:"medium",q:"The voltage gain of a common-source MOSFET amplifier is given by:",a:["Av = gm × Ro","Av = gm / Ro","Av = Ro / gm","Av = gm + Ro"],c:0},
+  {t:8,d:"medium",q:"Source degeneration in a MOSFET amplifier reduces the gain by a factor of:",a:["gm × RS","1 + gm × RS","gm / RS","RS / gm"],c:1},
+  {t:8,d:"medium",q:"In a common-source amplifier, the input resistance is approximately:",a:["RD only","RS only","RG1 in parallel with RG2","1/gm"],c:2},
+  {t:8,d:"medium",q:"A source-follower amplifier is also known as:",a:["Common-gate amplifier","Common-drain amplifier","Common-emitter amplifier","Common-base amplifier"],c:1},
+  {t:8,d:"medium",q:"The voltage gain of a source-follower amplifier is:",a:["Greater than 1","Negative and large","Less than 1 (approximately 1)","Equal to gm"],c:2},
+  {t:8,d:"medium",q:"FETs provide lower noise output compared to BJTs, making them preferred as:",a:["Power output stages","Preamplifiers where noise must be minimized","High-current switches","Class C amplifiers"],c:1},
+  {t:8,d:"hard",q:"In a common-gate amplifier, the input resistance looking into the source is approximately:",a:["RD","RG","1/gm","Infinity"],c:2},
+  {t:8,d:"hard",q:"In a common-gate MOSFET amplifier, the voltage gain is:",a:["Av = −gm(RD||RL)","Av = +gm(RD||RL)","Av = −gm/RD","Av = gm/RL"],c:1},
+  {t:8,d:"hard",q:"A dual-gate MOSFET amplifier allows gain control through:",a:["Gate 1","Gate 2","The source terminal","The drain resistor"],c:1},
+  {t:8,d:"hard",q:"In a common-source amplifier, transconductance (gm) is proportional to the square root of:",a:["VGS","VDS","Drain current ID","Threshold voltage Vt"],c:2},
+  {t:8,d:"hard",q:"When the bypass capacitor CS is removed from a common-source amplifier, the result is called:",a:["Common-gate configuration","Source degeneration","Drain degeneration","Gate bootstrapping"],c:1},
+
+  // ───── TOPIC 9: POWER AMPLIFIERS / OP-AMPS ─────
+  {t:9,d:"easy",q:"A Class A power amplifier is biased at:",a:["Cutoff","The center of the load line","Just above cutoff","Below cutoff"],c:1},
+  {t:9,d:"easy",q:"Class A amplifiers conduct for how many degrees of the input cycle?",a:["90°","180°","270°","360°"],c:3},
+  {t:9,d:"easy",q:"Class B amplifiers conduct for approximately how many degrees per device?",a:["360°","270°","180°","90°"],c:2},
+  {t:9,d:"easy",q:"Crossover distortion is most associated with which amplifier class?",a:["Class A","Class B","Class C","Class D"],c:1},
+  {t:9,d:"easy",q:"Class C amplifiers are used primarily for:",a:["Audio amplification","DC regulation","Radio frequency (RF) tuned amplifiers","Switch-mode power supplies"],c:2},
+  {t:9,d:"easy",q:"Class D amplifiers convert the input audio signal to:",a:["Analog sine waves","PWM (Pulse-Width Modulation) signals","DC voltage","Class A output"],c:1},
+  {t:9,d:"medium",q:"The efficiency formula for a power amplifier is:",a:["η = Pdc / Pout × 100%","η = Pout / Pdc × 100%","η = Pout × Pdc","η = Pout − Pdc"],c:1},
+  {t:9,d:"medium",q:"Class AB amplifiers use a small forward bias to reduce:",a:["Output power","Supply voltage","Crossover distortion","Overall gain"],c:2},
+  {t:9,d:"medium",q:"Class C amplifiers are biased beyond cutoff, meaning the transistor conducts for:",a:["The full cycle (360°)","Half the cycle (180°)","Less than 180° of the input cycle","Exactly 90° only"],c:2},
+  {t:9,d:"medium",q:"A class C amplifier uses a tank circuit to:",a:["Provide bias voltage","Restore the full sine wave at the output","Block DC","Match impedance to the load"],c:1},
+  {t:9,d:"medium",q:"A tank circuit operates by energy transferring between:",a:["Resistor and capacitor","Capacitor and inductor","Inductor and resistor","Two capacitors"],c:1},
+  {t:9,d:"medium",q:"Switch-mode (Class D) amplifiers can achieve efficiency as high as:",a:["25%","50%","78.5%","90-95%"],c:3},
+  {t:9,d:"hard",q:"The theoretical maximum efficiency of a Class A amplifier is approximately:",a:["78.5%","50%","25%","12%"],c:2},
+  {t:9,d:"hard",q:"The theoretical maximum efficiency of a Class B amplifier is approximately:",a:["25%","50%","78.5%","100%"],c:2},
+  {t:9,d:"hard",q:"Class D amplifiers use a low-pass filter at the output to:",a:["Remove the audio signal","Smooth the PWM waveform before it reaches the speaker","Increase distortion","Limit the supply voltage"],c:1},
+  {t:9,d:"hard",q:"A Zobel circuit in a Class D amplifier output stage compensates for:",a:["Transistor non-linearity","Non-constant loudspeaker impedance across frequencies","Supply voltage variations","Gate capacitance"],c:1},
+  {t:9,d:"hard",q:"At 1 W output in a 10 W amplifier, Class D efficiency is approximately 80%, compared to Class A at approximately:",a:["25%","3%","15%","40%"],c:1},
+  {t:9,d:"hard",q:"Class D amplifiers drive their transistors in which operating mode?",a:["Linear active region","Fully ON or fully OFF (switching)","Class B push-pull only","Saturation region continuously"],c:1},
+
+  // ───── TOPIC 10: INTEGRATED CIRCUITS ─────
+  {t:10,d:"easy",q:"An Integrated Circuit (IC) contains:",a:["Only resistors and capacitors","Multiple electronic components fabricated on a single semiconductor chip","A single transistor with a heat sink","Only digital logic gates"],c:1},
+  {t:10,d:"easy",q:"The integrated circuit was developed in 1958 primarily by work at:",a:["Bell Labs and Fairchild","Intel and AMD","Texas Instruments and Fairchild","Motorola and IBM"],c:2},
+  {t:10,d:"easy",q:"A microprocessor is best described as:",a:["A single transistor amplifier","The arithmetic unit of a computer on a single chip","A large discrete resistor network","A high-power rectifier"],c:1},
+  {t:10,d:"easy",q:"The Intel 4004, introduced in 1971, was significant because it was one of the first:",a:["Vacuum tubes","Germanium transistors","Microprocessors on a single IC chip","Crystal diode detectors"],c:2},
+  {t:10,d:"easy",q:"Modern microprocessors have feature sizes shrinking toward:",a:["10 micrometers","1 millimeter","10 nanometers","100 micrometers"],c:2},
+  {t:10,d:"medium",q:"Solid-state circuits were preferred over vacuum tubes primarily because they were:",a:["Larger and cheaper","Small, efficient, and more reliable","Louder and more powerful","Better for high-voltage applications"],c:1},
+  {t:10,d:"medium",q:"Switch-mode (Class D) amplifier ICs typically employ feedback to improve:",a:["Distortion and Power Supply Rejection Ratio (PSRR)","Only output voltage","Input impedance","Temperature stability"],c:0},
+  {t:10,d:"medium",q:"Without feedback in a Class D IC, the PSRR is approximately:",a:["0 dB","40 dB","80 dB","120 dB"],c:0},
+  {t:10,d:"medium",q:"The feature size of the Intel 4004 microprocessor was approximately:",a:["10 nm","100 nm","1 µm","10 µm"],c:3},
+  {t:10,d:"medium",q:"Jack Kilby and Robert Noyce shared which prestigious award for their IC invention?",a:["Turing Award","Nobel Prize in Physics","IEEE Medal","Nobel Prize in Chemistry"],c:1},
+  {t:10,d:"hard",q:"Class D amplifier ICs use linear feedback techniques. This means they are technically:",a:["True digital amplifiers","Not true digital amplifiers","Purely Class B circuits","Purely Class A circuits"],c:1},
+  {t:10,d:"hard",q:"The Power Supply Rejection Ratio (PSRR) with feedback in a Class D IC can reach:",a:["0 dB","20 dB","40 dB","80 dB"],c:3},
+  {t:10,d:"hard",q:"Modern ICs allow a personal computer's key logic to fit on a single chip, which made computers:",a:["Larger and more expensive","Smaller, faster, cheaper, and more reliable","Only suitable for military use","Slower but more accurate"],c:1},
+  {t:10,d:"hard",q:"A full-bridge Class D amplifier uses how many power MOSFETs per loudspeaker?",a:["1","2","3","4"],c:3},
+  {t:10,d:"hard",q:"EMI (Electromagnetic Interference) in Class D amplifiers is most likely to occur with:",a:["Short speaker leads","Properly filtered outputs","Long speaker leads","Low switching frequencies"],c:2},
+];
+
+/* =====================================================================
+   STATE
+===================================================================== */
+let shuffledQ = [];
+let currentIdx = 0;
+let userAnswers = [];   // {qIdx, chosenOption, correct}
+let answered = [];      // boolean array same length as shuffledQ
+let score = 0;
+
+/* =====================================================================
+   UTILITIES
+===================================================================== */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* =====================================================================
+   QUIZ LOGIC
+===================================================================== */
+function startQuiz() {
+  // Shuffle questions and their answer options
+  shuffledQ = shuffle(QUESTIONS).map(q => {
+    // Shuffle answers while tracking correct one
+    const indices = [0,1,2,3];
+    const shuffledIndices = shuffle(indices);
+    const newAnswers = shuffledIndices.map(i => q.a[i]);
+    const newCorrect = shuffledIndices.indexOf(q.c);
+    return { ...q, a: newAnswers, c: newCorrect };
+  });
+  currentIdx = 0;
+  userAnswers = [];
+  answered = new Array(shuffledQ.length).fill(null); // null = unanswered, obj = answer data
+  score = 0;
+  updateHeader('ECE · Quiz Mode');
+  showScreen('quizScreen');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = shuffledQ[currentIdx];
+  const total = shuffledQ.length;
+
+  // Progress
+  const pct = Math.round((currentIdx / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `Question ${currentIdx + 1} of ${total}`;
+  document.getElementById('qCounter').textContent = `${currentIdx + 1} / ${total}`;
+
+  // Score display
+  const correct = answered.filter(a => a && a.correct).length;
+  const wrong = answered.filter(a => a && !a.correct).length;
+  document.getElementById('correctCount').textContent = correct;
+  document.getElementById('wrongCount').textContent = wrong;
+  document.getElementById('remainCount').textContent = total - answered.filter(Boolean).length;
+  document.getElementById('progressScore').textContent = `Score: ${correct}`;
+
+  // Topic + difficulty
+  const diffDot = `<span class="difficulty-dot diff-${q.d}"></span>`;
+  document.getElementById('questionTopic').innerHTML =
+    `${diffDot} ${TOPIC_NAMES[q.t]} · ${q.d.charAt(0).toUpperCase()+q.d.slice(1)}`;
+
+  document.getElementById('questionText').textContent = q.q;
+
+  // Options
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.a.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i);
+
+    // Re-apply state if already answered
+    const ans = answered[currentIdx];
+    if (ans !== null) {
+      btn.disabled = true;
+      if (i === q.c) btn.classList.add('correct');
+      else if (i === ans.chosen) btn.classList.add('wrong');
+      else btn.classList.add('dimmed');
+    }
+    grid.appendChild(btn);
+  });
+
+  // Feedback
+  const fb = document.getElementById('feedbackBar');
+  const ans = answered[currentIdx];
+  if (ans !== null) {
+    if (ans.correct) {
+      fb.className = 'feedback-bar show correct-fb';
+      document.getElementById('feedbackIcon').textContent = '✓';
+      document.getElementById('feedbackText').textContent = 'Correct! Well done.';
+    } else {
+      fb.className = 'feedback-bar show wrong-fb';
+      document.getElementById('feedbackIcon').textContent = '✗';
+      document.getElementById('feedbackText').textContent =
+        `Incorrect. The correct answer is: "${q.a[q.c]}"`;
+    }
+  } else {
+    fb.className = 'feedback-bar';
+  }
+
+  // Nav buttons
+  document.getElementById('prevBtn').disabled = currentIdx === 0;
+  const nextBtn = document.getElementById('nextBtn');
+  const finishBtn = document.getElementById('finishBtn');
+  if (currentIdx === total - 1) {
+    nextBtn.style.display = 'none';
+    finishBtn.style.display = 'inline-flex';
+  } else {
+    nextBtn.style.display = 'inline-flex';
+    finishBtn.style.display = 'none';
+  }
+}
+
+function selectAnswer(chosen) {
+  if (answered[currentIdx] !== null) return; // already answered
+  const q = shuffledQ[currentIdx];
+  const correct = chosen === q.c;
+  answered[currentIdx] = { chosen, correct };
+  if (correct) score++;
+
+  // Highlight buttons
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.c) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  });
+
+  // Show feedback
+  const fb = document.getElementById('feedbackBar');
+  if (correct) {
+    fb.className = 'feedback-bar show correct-fb';
+    document.getElementById('feedbackIcon').textContent = '✓';
+    document.getElementById('feedbackText').textContent = 'Correct! Well done.';
+  } else {
+    fb.className = 'feedback-bar show wrong-fb';
+    document.getElementById('feedbackIcon').textContent = '✗';
+    document.getElementById('feedbackText').textContent =
+      `Incorrect. The correct answer is: "${q.a[q.c]}"`;
+  }
+
+  // Update chips
+  const correctCount = answered.filter(a => a && a.correct).length;
+  const wrongCount = answered.filter(a => a && !a.correct).length;
+  document.getElementById('correctCount').textContent = correctCount;
+  document.getElementById('wrongCount').textContent = wrongCount;
+  document.getElementById('remainCount').textContent = shuffledQ.length - answered.filter(Boolean).length;
+  document.getElementById('progressScore').textContent = `Score: ${correctCount}`;
+}
+
+function nextQuestion() {
+  if (currentIdx < shuffledQ.length - 1) {
+    currentIdx++;
+    renderQuestion();
+  }
+}
+
+function prevQuestion() {
+  if (currentIdx > 0) {
+    currentIdx--;
+    renderQuestion();
+  }
+}
+
+function finishEarly() {
+  showResults();
+}
+
+/* =====================================================================
+   RESULTS
+===================================================================== */
+function showResults() {
+  const total = answered.filter(Boolean).length;
+  const correct = answered.filter(a => a && a.correct).length;
+  const wrong = answered.filter(a => a && !a.correct).length;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+  document.getElementById('resultsPct').textContent = pct + '%';
+  document.getElementById('rCorrect').textContent = correct;
+  document.getElementById('rWrong').textContent = wrong;
+  document.getElementById('rTotal').textContent = total;
+  document.getElementById('rPct').textContent = pct + '%';
+
+  // Conic gradient circle
+  const circle = document.getElementById('resultsCircle');
+  circle.style.background = `conic-gradient(
+    ${pct >= 80 ? '#34d399' : pct >= 60 ? '#6378ff' : pct >= 40 ? '#fbbf24' : '#f87171'} ${pct}%,
+    #1f2540 ${pct}%
+  )`;
+
+  // Performance label
+  let perfLabel = '', perfClass = '', perfSub = '';
+  if (pct >= 90) { perfLabel = '🏆 Excellent!'; perfClass = 'perf-excellent'; perfSub = 'Outstanding performance. You clearly mastered the material.'; }
+  else if (pct >= 75) { perfLabel = '✓ Good Job'; perfClass = 'perf-good'; perfSub = 'Solid understanding with a few gaps to review.'; }
+  else if (pct >= 55) { perfLabel = '📈 Average'; perfClass = 'perf-average'; perfSub = 'Getting there — revisit the missed topics for improvement.'; }
+  else { perfLabel = '📖 Needs Review'; perfClass = 'perf-review'; perfSub = 'Consider reviewing the lecture materials and retrying.'; }
+
+  const pl = document.getElementById('perfLabel');
+  pl.textContent = perfLabel;
+  pl.className = `performance-label ${perfClass}`;
+  document.getElementById('perfSub').textContent = perfSub;
+
+  const mistakes = answered.filter(a => a && !a.correct).length;
+  document.getElementById('reviewBtn').style.display = mistakes > 0 ? 'inline-flex' : 'none';
+
+  updateHeader('ECE · Results');
+  showScreen('resultsScreen');
+}
+
+/* =====================================================================
+   REVIEW
+===================================================================== */
+function showReview() {
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+
+  let mistakeCount = 0;
+  answered.forEach((ans, idx) => {
+    if (!ans || ans.correct) return;
+    mistakeCount++;
+    const q = shuffledQ[idx];
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `
+      <div class="review-q-num">Question ${idx + 1} · ${TOPIC_NAMES[q.t]} · ${q.d}</div>
+      <div class="review-q-text">${q.q}</div>
+      <div class="review-answers">
+        <div class="review-answer ra-wrong">
+          <span class="ra-icon">✗</span>
+          Your answer: ${q.a[ans.chosen]}
+        </div>
+        <div class="review-answer ra-correct">
+          <span class="ra-icon">✓</span>
+          Correct answer: ${q.a[q.c]}
+        </div>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+
+  if (mistakeCount === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--success);font-size:18px;">🎉 No mistakes to review! Perfect score!</div>';
+  }
+
+  updateHeader(`ECE · Review (${mistakeCount} mistake${mistakeCount !== 1 ? 's' : ''})`);
+  showScreen('reviewScreen');
+}
+
+/* =====================================================================
+   HEADER BADGE
+===================================================================== */
+function updateHeader(text) {
+  document.getElementById('headerBadge').textContent = text;
+}
+</script>
+</body>
+</html>
